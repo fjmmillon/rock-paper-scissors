@@ -7,11 +7,9 @@ function game(){
         console.log(`Computer selection: ${computerSelection}`);
         console.log(playRound(playerSelection, computerSelection));
         addToScore(score,rockPaperScissorsGame(["computer",computerSelection],["player",playerSelection]));
-        //console.log(scoreAsStr(score));
     }
     console.log("Final "+scoreAsStr(score));
     console.log(strResultOfGame(score));
-    return "";
 }
 function initialiceScore(){
     return ({player:0,computer:0});
@@ -21,25 +19,14 @@ function playRound(playerSel, computerSel){
     return strResultOfGame(result);
 }
 function addToScore(scoreObj, resultObj){
-    //Maybe, this need to be rethought
-    //Object.keys(scoreObj).forEach(key => scoreObj[key]+=resultObj[key]);
-    scoreObj.player+=resultObj.player;
-    scoreObj.computer+=resultObj.computer;
+    Object.keys(scoreObj).forEach(key => scoreObj[key]+=resultObj[key]);
+
 }
 function scoreAsStr(scoreObj){
     return `Score:
     Player: ${scoreObj.player},
     Computer: ${scoreObj.computer}`;
 }
-// function strResultOfGame(resultObj){
-//     let resultOfGame= resultObj.player-resultObj.computer;
-//     let msgMap = new Map([
-//         [1, "You win!"],
-//         [0, "Even match!"],
-//         [-1, "You lose!"]
-//     ]);
-//     return msgMap.get(resultOfGame/Math.abs(resultOfGame));
-// }
 
 function strResultOfGame(resultObj){
      let resultOfGame= resultObj.player-resultObj.computer;
