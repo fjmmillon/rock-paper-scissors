@@ -1,16 +1,45 @@
-function game(){
+const gameIter = gameGen();
+gameIter.next();
+let buttons = Array.from(document.querySelectorAll("button"));
+buttons.forEach(button =>{
+    button.addEventListener("click", (event) => {
+        //console.log("Button clicked.");
+        //console.log(event.target.id);
+        let gameStatus = gameIter.next(event.target.id);
+        //console.log(gameStatus);
+        console.log(stringifyResultOfGen(gameStatus));
+        });
+    });
+
+function* gameGen(playerSel){
     let score = initialiceScore();
-    for(let i = 1; i <= 5; i++){
-        let playerSelection = playerPlay();
-        console.log(`Player selection: ${playerSelection}`);
-        let computerSelection = computerPlay();
-        console.log(`Computer selection: ${computerSelection}`);
-        console.log(playRound(playerSelection, computerSelection));
-        addToScore(score,rockPaperScissorsGame(["computer",computerSelection],["player",playerSelection]));
+    let computerSelection;
+    let turn = score;
+    while(true){
+        let playerSelection = yield ({score,computerSelection,'scoreAsStr':scoreAsStr(turn),'strResultOfGame':strResultOfGame(score)});
+        computerSelection = computerPlay();
+        turn = rockPaperScissorsGame(["computer",computerSelection],["player",playerSelection]);
+        addToScore(score,turn);  
     }
-    console.log("Final "+scoreAsStr(score));
-    console.log(strResultOfGame(score));
+};
+function stringifyResultOfGen(yielded){
+    return(`Computer Selection: ${yielded.value.computerSelection}
+    ${yielded.value.strResultOfGame}
+    ${yielded.value.scoreAsStr}`);
 }
+
+/* function game(){
+    let score = initialiceScore();
+    let playerSelection = playerPlay();
+    //console.log(`Player selection: ${playerSelection}`);
+    let computerSelection = computerPlay();
+    console.log(`Computer selection: ${computerSelection}`);
+    //console.log(playRound(playerSelection, computerSelection));
+    addToScore(score,rockPaperScissorsGame(["computer",computerSelection],["player",playerSelection]));
+    
+    console.log(scoreAsStr(score));
+    console.log(strResultOfGame(score));
+} */
 function initialiceScore(){
     return ({player:0,computer:0});
 }
