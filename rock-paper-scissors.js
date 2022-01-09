@@ -8,8 +8,12 @@ buttons.forEach(button =>{
         let gameStatus = gameIter.next(event.target.id);
         //console.log(gameStatus);
         console.log(stringifyResultOfGen(gameStatus));
+        updateLogger(stringifyResultOfGen(gameStatus));
         });
     });
+function updateLogger(str){
+    document.querySelector('.logger').innerText = str;
+}
 
 function* gameGen(playerSel){
     let score = initialiceScore();
@@ -23,8 +27,10 @@ function* gameGen(playerSel){
     }
 };
 function stringifyResultOfGen(yielded){
-    return(`Computer Selection: ${yielded.value.computerSelection}
+    return(
+    `Computer Selection: ${yielded.value.computerSelection}
     ${yielded.value.strResultOfGame}
+
     ${yielded.value.scoreAsStr}`);
 }
 
