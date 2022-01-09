@@ -3,14 +3,14 @@ gameIter.next();
 let buttons = Array.from(document.querySelectorAll("button"));
 buttons.forEach(button =>{
     button.addEventListener("click", (event) => {
-        //console.log("Button clicked.");
-        //console.log(event.target.id);
-        let gameStatus = gameIter.next(event.target.id);
-        //console.log(gameStatus);
-        console.log(stringifyResultOfGen(gameStatus));
-        updateLogger(stringifyResultOfGen(gameStatus));
+        let playerSelection = event.target.id;
+        let gameStatus = gameIter.next(playerSelection);
+        updateLogger(`Player Selection: ${playerSelection}
+        `+stringifyResultOfGen(gameStatus));
         });
     });
+
+
 function updateLogger(str){
     document.querySelector('.logger').innerText = str;
 }
@@ -19,8 +19,9 @@ function* gameGen(playerSel){
     let score = initialiceScore();
     let computerSelection;
     let turn = score;
+    let playerSelection;
     while(true){
-        let playerSelection = yield ({score,computerSelection,'scoreAsStr':scoreAsStr(turn),'strResultOfGame':strResultOfGame(score)});
+        playerSelection = yield ({score,computerSelection,'scoreAsStr':scoreAsStr(score),'playerSelection':playerSel,'strResultOfGame':strResultOfGame(turn)});
         computerSelection = computerPlay();
         turn = rockPaperScissorsGame(["computer",computerSelection],["player",playerSelection]);
         addToScore(score,turn);  
@@ -30,22 +31,9 @@ function stringifyResultOfGen(yielded){
     return(
     `Computer Selection: ${yielded.value.computerSelection}
     ${yielded.value.strResultOfGame}
-
     ${yielded.value.scoreAsStr}`);
 }
 
-/* function game(){
-    let score = initialiceScore();
-    let playerSelection = playerPlay();
-    //console.log(`Player selection: ${playerSelection}`);
-    let computerSelection = computerPlay();
-    console.log(`Computer selection: ${computerSelection}`);
-    //console.log(playRound(playerSelection, computerSelection));
-    addToScore(score,rockPaperScissorsGame(["computer",computerSelection],["player",playerSelection]));
-    
-    console.log(scoreAsStr(score));
-    console.log(strResultOfGame(score));
-} */
 function initialiceScore(){
     return ({player:0,computer:0});
 }
@@ -55,7 +43,6 @@ function playRound(playerSel, computerSel){
 }
 function addToScore(scoreObj, resultObj){
     Object.keys(scoreObj).forEach(key => scoreObj[key]+=resultObj[key]);
-
 }
 function scoreAsStr(scoreObj){
     return `Score:
